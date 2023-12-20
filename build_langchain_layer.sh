@@ -1,4 +1,4 @@
-set -eo
+set -e
 
 LAYER_NAME=langchain_layer.zip
 CURRENT_PATH=`pwd`

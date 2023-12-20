@@ -1,8 +1,8 @@
-set -eo
+set -e
 
 AWS_CLI=aws
 CURRENT_PATH=`pwd`
-source ./build_lanchhain_layer.sh
+source ./build_langchain_layer.sh
 S3_ASSETS_BUCKET=pabcol-us-east-1
 VERSION=v1
 VERSION_PREFIX=artifacts/ML-12016/$VERSION
