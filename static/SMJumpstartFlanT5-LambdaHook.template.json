@@ -40,16 +40,15 @@
        "Statement": [
         {
          "Action": [
-          "sagemaker:InvokeEndpoint",
-          "sagemaker:InvokeEndpointAsync"
+          "bedrock:InvokeModel",
          ],
          "Effect": "Allow",
-         "Resource": {"Fn::Sub":"arn:aws:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/sm-jumpstart-flan-bot-endpoint*"}
+         "Resource": "*"
         }
        ],
        "Version": "2012-10-17"
       },
-      "PolicyName": "invoke-sagemaker"
+      "PolicyName": "invoke-model"
      }
     ],
     "RoleName": "sm_jumpstart_flan_bot_role"
@@ -58,13 +57,13 @@
    "LangchainLambdaLayer": {
    "Type": "AWS::Lambda::LayerVersion",
    "Properties": {
-    "CompatibleRuntimes": ["python3.9"],
+    "CompatibleRuntimes": ["python3.11"],
     "Content":{
       "S3Bucket": {"Ref": "S3BucketName"},
       "S3Key": {"Fn::Sub":"${Version}/langchain_layer.zip"}
     },
     "Description":"Langchain layer",
-    "LayerName":"Langchain-layer-python-39"
+    "LayerName":"Langchain-layer-python-311"
    },
    "DependsOn": [
     "LambdaHookRole"
@@ -92,7 +91,7 @@
     "FunctionName": "qna-sm_jumpstart_flan_bot_lambda_hook",
     "Handler": "lex_langchain_hook_function.lambda_handler",
     "MemorySize": 512,
-    "Runtime": "python3.9",
+    "Runtime": "python3.11",
     "Timeout": 900,
     "Layers":[{"Ref": "LangchainLambdaLayer"}]
    },

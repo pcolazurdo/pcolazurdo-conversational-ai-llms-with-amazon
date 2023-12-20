@@ -2,46 +2,17 @@
 """
 from typing import List, Any, Dict
 from langchain.memory import ConversationBufferMemory
-from langchain import PromptTemplate, SagemakerEndpoint, ConversationChain
-from langchain.llms.sagemaker_endpoint import LLMContentHandler
+from langchain.prompts import PromptTemplate
+# from langchain.prompts import PromptTemplate
+from langchain.chains.question_answering import load_qa_chain
+from langchain.llms import SagemakerEndpoint
+# from langchain.llms.sagemaker_endpoint import LLMContentHandler
 from langchain.schema import BaseMemory
-from pydantic import BaseModel, Extra
+# from pydantic import BaseModel, Extra
+
 import json
 
-class SagemakerContentHandler(LLMContentHandler):
-    """Helper class to parse Sagemaker input/output
-    """
-    
-    content_type = "application/json"
-    accepts = "application/json"
-
-    def transform_input(self, prompt: str, model_kwargs: Dict) -> bytes:
-        """Parse input into required format for Sagemaker
-        
-        Args:
-            prompt (str): LLM Prompt
-            model_kwargs (Dict): model tuning paramters
-        
-        Returns:
-            bytes: Description
-        """
-        input_str = json.dumps({"text_inputs": prompt, **model_kwargs})
-        return input_str.encode('utf-8')
-
-    def transform_output(self, output: bytes) -> str:
-        """Parse sagemaker output. Return the first generated text as chatbot response
-        
-        Args:
-            output (bytes): Bytes output from Sagemaker
-        
-        Returns:
-            str: Chat response
-        """
-        response_json = json.loads(output.read().decode("utf-8"))
-        print(response_json)
-        return response_json['generated_texts'][0]
-
-class LexConversationalMemory(BaseMemory, BaseModel):
+class LexConversationalMemory(BaseMemory):
 
     """Langchain Custom Memory class that uses Lex Conversation history
     
@@ -100,9 +71,6 @@ class LexConversationalMemory(BaseMemory, BaseModel):
         self.history =  {
             self.memory_key: ccontext[self.memory_key] + input_text + f"\nAI: {output_text}",
         }
-
-
-            
 
 class SagemakerLangchainBot():
 

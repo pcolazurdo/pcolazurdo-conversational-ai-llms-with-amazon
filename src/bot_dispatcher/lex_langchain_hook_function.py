@@ -1,7 +1,7 @@
 """Lambda that acts as the fulfillment hook for either a Lex bot or the QnABot on AWS Solution
 """
-from dispatchers.LexV2SMLangchainDispatcher import LexV2SMLangchainDispatcher
-from dispatchers.QnABotSMLangchainDispatcher import QnABotSMLangchainDispatcher
+# from dispatchers.LexV2SMLangchainDispatcher import LexV2SMLangchainDispatcher
+from dispatchers.bedrockLangchainDispatcher import QnABotBedrockLangchainDispatcher
 from dispatchers import utils
 import logging
 
@@ -19,8 +19,9 @@ def dispatch_lexv2(request):
     Returns:
         dict: Description
     """
-    lexv2_dispatcher = LexV2SMLangchainDispatcher(request)
-    return lexv2_dispatcher.dispatch_intent()
+    raise Exception("LexV2 FallbackIntent not supported yet")
+    # lexv2_dispatcher = LexV2SMLangchainDispatcher(request)
+    # return lexv2_dispatcher.dispatch_intent()
 
 def dispatch_qnabot(request):
     """Summary
@@ -33,7 +34,8 @@ def dispatch_qnabot(request):
         see https://docs.aws.amazon.com/solutions/latest/qnabot-on-aws/specifying-lambda-hook-functions.html
     """
     request['res']['message'] = "Hi! This is your Custom Python Hook speaking!"
-    qna_intent_dispatcher = QnABotSMLangchainDispatcher(request)
+    # qna_intent_dispatcher = QnABotSMLangchainDispatcher(request)
+    qna_intent_dispatcher = QnABotBedrockLangchainDispatcher(request)
     return qna_intent_dispatcher.dispatch_intent()
 
 
